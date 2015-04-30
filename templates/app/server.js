@@ -10,7 +10,7 @@ var server = express.createServer();
 server.configure(function(){
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });
-    server.use(connect.bodyParser());
+    server.use(express.bodyParser());
     server.use(express.cookieParser());
     server.use(express.session({ secret: "shhhhhhhhh!"}));
     server.use(connect.static(__dirname + '/static'));
@@ -80,6 +80,10 @@ io.sockets.on('connection', function(socket) {
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res) {
+
+console.log('GET PARAMS: ');
+console.log('req: ' + JSON.stringify(req.query));
+
     res.render('index.jade', {
         locals : {
             title : 'Your Page Title',
@@ -97,7 +101,7 @@ server.get('/500', function(req, res) {
 
 //The 404 Route (ALWAYS Keep this as the last route)
 server.get('/*', function(req, res){
-    throw new NotFound;
+    throw new NotFound();
 });
 
 function NotFound(msg) {
